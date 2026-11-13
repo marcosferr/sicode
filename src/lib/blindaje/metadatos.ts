@@ -170,7 +170,13 @@ async function hallazgosFoto(b: Uint8Array): Promise<string[]> {
     const equipo = [m.Make, m.Model].filter(Boolean).join(" ");
     if (equipo) hallazgos.push(`Marca y modelo del dispositivo (${equipo})`);
     const fecha = m.DateTimeOriginal ?? m.CreateDate ?? m.ModifyDate;
-    if (fecha) hallazgos.push(`Fecha y hora de la toma (${fecha instanceof Date ? fecha.toISOString().slice(0, 16).replace("T", " ") : String(fecha)})`);
+    // La fecha EXIF no tiene zona horaria: se muestra tal como la guardó la cámara.
+    const dos = (n: number) => String(n).padStart(2, "0");
+    const textoFecha =
+      fecha instanceof Date
+        ? `${fecha.getFullYear()}-${dos(fecha.getMonth() + 1)}-${dos(fecha.getDate())} ${dos(fecha.getHours())}:${dos(fecha.getMinutes())}`
+        : String(fecha);
+    if (fecha) hallazgos.push(`Fecha y hora de la toma (${textoFecha})`);
     for (const [k, etiqueta] of [
       ["BodySerialNumber", "Número de serie del dispositivo"],
       ["SerialNumber", "Número de serie del dispositivo"],
