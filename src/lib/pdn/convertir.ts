@@ -157,9 +157,11 @@ export function aContratoS6(c: Crudo): ContratoS6 {
   const oferentes = (Array.isArray(t.tenderers) ? t.tenderers : [])
     .map((x: Crudo) => ({ id: txt(x.id), nombre: txt(x.name) ?? "" }))
     .filter((x: { nombre: string }) => x.nombre);
+  const fechaAdjudicacion = fecha ?? txt(t.awardPeriod?.endDate) ?? txt(c.date);
   return {
     ocid: txt(c.ocid) ?? "",
-    ciclo: Number(c.cycle) || Number(String(txt(c.date) ?? "").slice(0, 4)) || undefined,
+    // `date` es la fecha de publicación del registro, no la del contrato: se prefiere la de firma.
+    ciclo: Number(c.cycle) || Number(String(fechaAdjudicacion ?? "").slice(0, 4)) || undefined,
     comprador: txt(c.buyer?.name),
     titulo: txt(t.title) ?? txt(adjudicaciones[0]?.title),
     metodo: txt(t.procurementMethod),
@@ -169,7 +171,7 @@ export function aContratoS6(c: Crudo): ContratoS6 {
     proveedores: [...proveedores.values()],
     montoAdjudicado: monto || undefined,
     moneda,
-    fechaAdjudicacion: fecha ?? txt(t.awardPeriod?.endDate) ?? txt(c.date),
+    fechaAdjudicacion,
     diasParaOfertar: dias(txt(t.tenderPeriod?.startDate), txt(t.tenderPeriod?.endDate)),
     url: url ?? txt(t.documents?.[0]?.url),
   };

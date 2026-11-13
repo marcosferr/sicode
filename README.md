@@ -95,7 +95,7 @@ Las mismas piezas que el prototipo del S5: Next.js (App Router) con TypeScript, 
 
 ## Límites conocidos
 
-- El S6 publicado en la PDN cubre contrataciones federales de 2015 a 2021. Lo posterior y lo estatal no aparece.
+- El S6 publicado en la PDN es de ámbito federal y sus ciclos van de 2015 a 2021. Lo estatal y casi todo lo posterior no aparece.
 - El S3 no publica nombres en las faltas no graves, así que solo se cruzan personas en faltas graves.
 - Coincidir en nombre y ente no es una identificación: el S2 y el S3 no publican un identificador de la persona. Por eso esos indicios nunca pasan de confiabilidad B.
 - El aviso de riesgo del relato usa reglas, no comprensión del texto. Reduce descuidos frecuentes; no garantiza el anonimato.

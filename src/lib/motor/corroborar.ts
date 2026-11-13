@@ -186,7 +186,7 @@ export async function corroborar(
       })
       .filter((x) => x.porRfc || x.sim >= P.similitud_empresa_minima)
       .map((x) => ({ k: x.k, conf: (x.porRfc ? "A" : "B") as Confiabilidad }));
-    registrar("S6", `Contratos adjudicados a ${etiqueta} (el S6 publicado cubre 2015–2021, ámbito federal)`, rS6, propios.length);
+    registrar("S6", `Contratos adjudicados a ${etiqueta} (el S6 publicado es de ámbito federal; ciclos 2015 a 2021)`, rS6, propios.length);
     contratosPorEmpresa.set(clave, propios);
 
     const conEnte = propios.filter((x) => entesDenunciados.some((en) => coincideEnte(x.k.comprador, en, P.similitud_ente_minima)));
