@@ -27,8 +27,8 @@ import type {
 } from "./tipos";
 
 const API = "https://api.plataformadigitalnacional.org";
-const DIR_PDN = () => path.join(process.env.RS_DIR_DATOS ?? path.join(process.cwd(), "var"), "pdn");
-const DIR_CACHE = () => path.join(process.env.RS_DIR_DATOS ?? path.join(process.cwd(), "var"), "cache");
+const DIR_PDN = () => path.join(process.env.SICODE_DIR_DATOS ?? path.join(process.cwd(), "var"), "pdn");
+const DIR_CACHE = () => path.join(process.env.SICODE_DIR_DATOS ?? path.join(process.cwd(), "var"), "cache");
 const TTL_CACHE_MS = 7 * 24 * 3600 * 1000;
 
 /* ---------- Índices locales ---------- */
@@ -94,7 +94,7 @@ async function pedir<T>(url: string, cuerpo?: unknown, o: { ms?: number; intento
     try {
       const r = await fetch(url, {
         method: cuerpo ? "POST" : "GET",
-        headers: { "Content-Type": "application/json", "User-Agent": "resguardo-s5" },
+        headers: { "Content-Type": "application/json", "User-Agent": "sicode" },
         body: cuerpo ? JSON.stringify(cuerpo) : undefined,
         signal: AbortSignal.timeout(o.ms ?? 20_000),
       });

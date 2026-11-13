@@ -27,7 +27,7 @@ const DESTINO = path.join(process.cwd(), "var", "pdn");
 
 async function descargar(id: string): Promise<{ bytes: Buffer; url: string }> {
   const url = `https://drive.usercontent.google.com/download?id=${id}&export=download&confirm=t`;
-  const r = await fetch(url, { headers: { "User-Agent": "resguardo-s5/ingesta" } });
+  const r = await fetch(url, { headers: { "User-Agent": "sicode/ingesta" } });
   if (!r.ok) throw new Error(`Descarga fallida (${r.status}) de ${url}`);
   const bytes = Buffer.from(await r.arrayBuffer());
   if (bytes.subarray(0, 2).toString() !== "PK") throw new Error(`La respuesta de ${url} no es un zip`);

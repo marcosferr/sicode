@@ -1,3 +1,4 @@
+import { conLimitesUnicode } from "./texto";
 import type { ClasificacionSugerida } from "./tipos";
 
 /** Entidades federativas con su clave INEGI. */
@@ -53,7 +54,7 @@ export interface Conducta {
   pistas: RegExp;
 }
 
-export const CONDUCTAS: Conducta[] = [
+export const CONDUCTAS: Conducta[] = ([
   {
     clave: "SOBORNO",
     titulo: "Pidió o recibió dinero, regalos o favores",
@@ -138,7 +139,7 @@ export const CONDUCTAS: Conducta[] = [
     fundamentos: [F.NO_GRAVE],
     pistas: /\b(maltrat\w*|no me atendi\w*|negligen\w*|se neg[oó] a|retras[oó]|prepoten\w*)\b/i,
   },
-];
+] satisfies Conducta[]).map((c) => ({ ...c, pistas: conLimitesUnicode(c.pistas) }));
 
 export const CONDUCTA_POR_CLAVE = new Map(CONDUCTAS.map((c) => [c.clave, c]));
 

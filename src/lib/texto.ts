@@ -195,3 +195,14 @@ export function esRfcPlausible(rfc: string): boolean {
   const dia = Number(m[3]);
   return mes >= 1 && mes <= 12 && dia >= 1 && dia <= 31;
 }
+
+/**
+ * En JavaScript, `\b` solo conoce letras sin acento: no ve un límite de palabra antes de
+ * «éramos» ni después de «pidió». Esta función reescribe cada `\b` de una expresión como
+ * un límite de palabra que sí entiende letras acentuadas.
+ */
+export function conLimitesUnicode(re: RegExp): RegExp {
+  const limite = "(?:(?<![\\p{L}\\p{N}])(?=[\\p{L}\\p{N}])|(?<=[\\p{L}\\p{N}])(?![\\p{L}\\p{N}]))";
+  const banderas = re.flags.includes("u") ? re.flags : re.flags + "u";
+  return new RegExp(re.source.replace(/\\b/g, limite), banderas);
+}
