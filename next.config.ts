@@ -1,9 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
-  cacheComponents: true,
-  partialPrefetching: true,
+  // Todo el contenido es dinámico y sensible: no se usa caché de componentes.
+  poweredByHeader: false,
   turbopack: {
     rules: {
       "*.css": {

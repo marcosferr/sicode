@@ -16,19 +16,35 @@ describe("datos abiertos", () => {
     expect(proteger(5, 5)).toEqual({ valor: 5, suprimida: false });
   });
 
-  it("suprime celdas chicas y redondea el total para que no se despejen", () => {
+  it("suprime celdas chicas y redondea las demás para que no se despejen", () => {
     const denuncias = [
       ...Array.from({ length: 7 }, () => base({ lugar: { entidad: "09" } })),
       ...Array.from({ length: 2 }, () => base({ lugar: { entidad: "14" } })),
     ];
     const t = construirDatosAbiertos(denuncias).tablas.find((x) => x.id === "por_entidad")!;
     expect(t.filas).toEqual([
-      { entidad: "Ciudad de México", denuncias: 7, nota: null },
+      { entidad: "Ciudad de México", denuncias: 5, nota: null },
       { entidad: "Jalisco", denuncias: null, nota: "menos de 5" },
       { entidad: "Total", denuncias: 10, nota: "redondeado a múltiplos de 5" },
     ]);
-    // Con el total real (9) se despejaría Jalisco = 2.
+    // Con las cifras reales (7 y un total de 9) se despejaría Jalisco = 2.
     expect(t.proteccion).toEqual({ celdasSuprimidas: 1, totalRedondeado: true });
+  });
+
+  it("ninguna tabla permite reconstruir el total exacto si otra tiene celdas ocultas", () => {
+    const denuncias = [
+      ...Array.from({ length: 7 }, () => base({ lugar: { entidad: "09" } })),
+      ...Array.from({ length: 2 }, () => base({ lugar: { entidad: "14" } })),
+    ];
+    const c = construirDatosAbiertos(denuncias);
+    expect(c.totalesRedondeados).toBe(true);
+    expect(c.totalDenuncias.valor).toBe(10);
+    const totales = c.tablas.flatMap((t) => t.filas.filter((f) => f[t.columnas[0].clave] === "Total").map((f) => f.denuncias));
+    expect(totales.every((v) => v === 10)).toBe(true);
+    // Antes, «por mes» mostraba 9 en su única fila: 9 − 7 = 2 delataba la celda oculta.
+    expect(JSON.stringify(c)).not.toMatch(/"denuncias":[79]\b/);
+    const publicadas = c.tablas.flatMap((t) => t.filas.map((f) => f.denuncias)).filter((v): v is number => typeof v === "number");
+    expect(publicadas.every((v) => v % 5 === 0)).toBe(true);
   });
 
   it("nunca incluye relatos, nombres, folios, municipios ni entes denunciados", () => {
@@ -44,6 +60,12 @@ describe("datos abiertos", () => {
     const t = c.tablas.find((x) => x.id === "tiempos_por_autoridad")!;
     expect(t.filas[0]).toEqual({ autoridad: "OIC Grande", denuncias_cerradas: 5, mediana_dias: 10 });
     expect(JSON.stringify(t.filas)).not.toContain("OIC Chico");
+  });
+
+  it("sin celdas ocultas publica cifras exactas", () => {
+    const c = construirDatosAbiertos(Array.from({ length: 12 }, () => base({})));
+    expect(c.totalesRedondeados).toBe(false);
+    expect(c.totalDenuncias.valor).toBe(12);
   });
 
   it("genera CSV válido", () => {

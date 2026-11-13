@@ -9,7 +9,9 @@
     "lint": "eslint",
     "datos": "tsx scripts/ingesta.ts",
     "test": "vitest run",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "preparar": "tsx scripts/preparar.ts",
+    "demo": "SICODE_PDN=demo tsx scripts/demo.ts"
   },
   "dependencies": {
     "@directus/sdk": "^27.1.0",

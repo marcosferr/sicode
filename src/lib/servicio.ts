@@ -12,7 +12,7 @@ import { informeSinValores, limpiarArchivo, TIPOS_ACEPTADOS } from "./blindaje/m
 import type { EntradaDenuncia } from "./esquema";
 import { LIMITE_ARCHIVO } from "./esquema";
 import { corroborar } from "./motor/corroborar";
-import { FuentesReales } from "./pdn/fuentes";
+import { fuentesConfiguradas } from "./pdn/demo";
 import type { FuentesPDN } from "./pdn/tipos";
 import {
   cifrarContacto,
@@ -227,7 +227,7 @@ async function registrar(d: Denuncia, actor: string, accion: string, detalle?: s
   await almacen().guardar(d);
 }
 
-export async function corroborarDenuncia(id: string, actor: string, fuentes: FuentesPDN = new FuentesReales()) {
+export async function corroborarDenuncia(id: string, actor: string, fuentes: FuentesPDN = fuentesConfiguradas()) {
   const d = await cargar(id);
   d.corroboracion = await corroborar(d, fuentes);
   d.prioridad ??= ({ rojo: "ALTA", amarillo: "MEDIA", verde: "BAJA" } as const)[d.corroboracion.semaforo.color];

@@ -24,8 +24,10 @@ export const esquemaInformeLimpieza = z.object({
   bytesDespues: z.number().int().nonnegative(),
 });
 
-export const esquemaDenuncia = z
-  .object({
+const requiereCorreo = (d: { anonimo: boolean; contacto?: { correo?: string } }) => d.anonimo || Boolean(d.contacto?.correo);
+const mensajeCorreo = { message: "Si decides dejar tus datos, necesitamos al menos un correo.", path: ["contacto", "correo"] };
+
+const base = z.object({
     anonimo: z.boolean(),
     contacto: z
       .object({
@@ -55,11 +57,12 @@ export const esquemaDenuncia = z
       .array(z.object({ id: z.string().regex(/^[a-f0-9]{24}$/), informe: esquemaInformeLimpieza }))
       .max(8),
     altcha: z.string().max(4000),
-  })
-  .refine((d) => d.anonimo || Boolean(d.contacto?.correo), {
-    message: "Si decides dejar tus datos, necesitamos al menos un correo.",
-    path: ["contacto", "correo"],
   });
+
+export const esquemaDenuncia = base.refine(requiereCorreo, mensajeCorreo);
+
+/** Lo que valida el formulario paso a paso (evidencias y anti-bots se agregan al enviar). */
+export const esquemaFormulario = base.omit({ evidencias: true, altcha: true }).refine(requiereCorreo, mensajeCorreo);
 
 export type EntradaDenuncia = z.infer<typeof esquemaDenuncia>;
 

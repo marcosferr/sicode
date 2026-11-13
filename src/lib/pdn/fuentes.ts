@@ -244,6 +244,9 @@ export class FuentesReales implements FuentesPDN {
 
   declaraciones(p: NombrePersona) {
     return medir<DeclaracionS1>("api", async () => {
+      // Buscar a una persona en la API de declaraciones deja ver, a quien opere esa API,
+      // que alguien pregunta por ella. Quien necesite evitarlo puede apagar esta consulta.
+      if (process.env.SICODE_S1 === "off") throw new Error("Consulta de declaraciones desactivada (SICODE_S1=off).");
       if (!p.primerApellido || !p.nombres) {
         return { datos: [], detalle: "Se necesita nombre y primer apellido para buscar declaraciones." };
       }

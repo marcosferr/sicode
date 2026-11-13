@@ -7,8 +7,10 @@
  * 1. Nunca se publican filas por denuncia, relatos, nombres ni folios.
  * 2. El tiempo se agrega por mes y el territorio por entidad federativa.
  * 3. Supresión primaria: toda celda con menos de K denuncias se publica sin valor.
- * 4. Supresión por diferencia: si una tabla tiene celdas suprimidas, sus totales se
- *    redondean al múltiplo de K más cercano, para que no se puedan despejar restando.
+ * 4. Protección contra la resta: si alguna tabla tiene una celda suprimida, TODAS las
+ *    cifras publicadas (celdas y totales, en todas las tablas) se redondean al múltiplo
+ *    de K más cercano. Redondear solo los totales no alcanza: las filas de cualquier tabla
+ *    sin celdas ocultas suman el total exacto, y con él se despeja la celda oculta de otra.
  *
  * K es 5 por defecto (SICODE_K_ANONIMATO). Es un piso, no una garantía absoluta: quien
  * publique debe revisar además que una combinación de tablas no acote a un grupo pequeño.
@@ -37,6 +39,8 @@ export interface ConjuntoAbierto {
   generado: string;
   k: number;
   totalDenuncias: Celda;
+  /** Verdadero si todas las cifras se publican redondeadas a múltiplos de K. */
+  totalesRedondeados: boolean;
   tablas: Tabla[];
 }
 
@@ -217,10 +221,33 @@ export function construirDatosAbiertos(denuncias: Denuncia[], k = K_DEFECTO, hoy
     proteccion: { celdasSuprimidas: ocultas, totalRedondeado: false },
   });
 
+  // Protección cruzada: con una sola celda oculta en cualquier tabla, se redondean todas las cifras.
+  const haySupresion = tablas.some((t) => t.proteccion.celdasSuprimidas > 0);
+  const total = denuncias.length;
+  if (haySupresion) {
+    for (const t of tablas) {
+      const conteos = t.columnas.filter((c) => c.tipo === "entero").map((c) => c.clave);
+      for (const fila of t.filas) {
+        for (const clave of conteos) {
+          const v = fila[clave];
+          if (typeof v !== "number") continue;
+          // El total de cada tabla es el total general redondeado, no la suma de sus filas.
+          const esTotal = fila[t.columnas[0].clave] === "Total";
+          fila[clave] = redondear(esTotal ? total : v, k);
+          if (esTotal) fila.nota = `redondeado a múltiplos de ${k}`;
+        }
+      }
+      t.proteccion.totalRedondeado = true;
+    }
+  }
+  const totalDenuncias = proteger(total, k);
+  if (haySupresion && totalDenuncias.valor !== null) totalDenuncias.valor = redondear(total, k);
+
   return {
     generado: new Intl.DateTimeFormat("en-CA", { timeZone: "America/Mexico_City" }).format(hoy),
     k,
-    totalDenuncias: proteger(denuncias.length, k),
+    totalDenuncias,
+    totalesRedondeados: haySupresion,
     tablas,
   };
 }
@@ -244,7 +271,7 @@ export function descriptor(c: ConjuntoAbierto, base: string) {
     title: "Denuncias por faltas administrativas y hechos de corrupción: datos agregados",
     description:
       `Tablas agregadas generadas por SICODE. Las celdas con menos de ${c.k} denuncias se publican sin valor ` +
-      `y los totales afectados se redondean a múltiplos de ${c.k} para proteger la identidad de quienes denuncian.`,
+      `y, cuando eso ocurre, todas las cifras se redondean a múltiplos de ${c.k} para proteger la identidad de quienes denuncian.`,
     created: c.generado,
     licenses: [{ name: "CC-BY-4.0", title: "Creative Commons Atribución 4.0", path: "https://creativecommons.org/licenses/by/4.0/deed.es" }],
     resources: c.tablas.map((t) => ({
