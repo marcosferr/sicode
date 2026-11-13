@@ -32,6 +32,8 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
+!.env.directus.example
 
 # vercel
 .vercel
@@ -42,3 +44,6 @@ next-env.d.ts
 
 # datos de ejecución (índices de la PDN, caché, almacén local)
 /var/
+
+# Directus (credenciales locales)
+.env.directus

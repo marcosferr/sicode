@@ -6,12 +6,13 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint",
+    "lint": "eslint .",
     "datos": "tsx scripts/ingesta.ts",
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
     "preparar": "tsx scripts/preparar.ts",
-    "demo": "SICODE_PDN=demo tsx scripts/demo.ts"
+    "demo": "SICODE_PDN=demo tsx scripts/demo.ts",
+    "directus": "tsx scripts/directus.ts"
   },
   "dependencies": {
     "@directus/sdk": "^27.1.0",

@@ -3,7 +3,7 @@
 import { Accessibility, Contrast, Moon, ShieldCheck, Sun, Volume2, VolumeX } from "lucide-react";
 import Link from "next/link";
 import { useTheme } from "next-themes";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { cx } from "./ui";
 
 const PILDORA =
@@ -16,9 +16,19 @@ const ESCALAS = [
   { valor: "1.3", etiqueta: "Muy grande" },
 ];
 
+/** Preferencias de accesibilidad guardadas en este navegador (no viajan al servidor). */
+function leer(clave: string): string | null {
+  if (typeof window === "undefined") return null;
+  try {
+    return localStorage.getItem(clave);
+  } catch {
+    return null; // almacenamiento bloqueado: se usan los valores por defecto
+  }
+}
+
 export function Marca() {
   return (
-    <Link href="/" className="flex items-center gap-3 rounded-md text-banda-texto focus-visible:outline-dorado-claro" aria-label="SICODE, ir al inicio">
+    <Link href="/" className="flex items-center gap-3 rounded-md text-banda-texto focus-visible:outline-dorado-claro">
       <svg viewBox="0 0 40 40" className="size-10 shrink-0" aria-hidden="true">
         <path d="M20 3 6 8v10.5c0 8.4 5.7 15.2 14 18.5 8.3-3.3 14-10.1 14-18.5V8L20 3Z" fill="hsl(var(--dorado-claro))" />
         <path d="m13.5 20 4.5 4.5 8.5-9" fill="none" stroke="hsl(336 69% 20%)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
@@ -26,6 +36,7 @@ export function Marca() {
       <span className="leading-tight">
         <span className="block text-xl font-extrabold tracking-wide">SICODE</span>
         <span className="hidden text-xs font-medium opacity-90 sm:block">Sistema Integral de Corroboración de Denuncias</span>
+        <span className="sr-only">, ir al inicio</span>
       </span>
     </Link>
   );
@@ -33,24 +44,17 @@ export function Marca() {
 
 export function Encabezado() {
   const { resolvedTheme, setTheme } = useTheme();
-  const [montado, setMontado] = useState(false);
+  // Verdadero solo en el navegador: evita diferencias entre el HTML del servidor y el del cliente.
+  const montado = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
   const [abierto, setAbierto] = useState(false);
-  const [escala, setEscala] = useState("1");
-  const [contraste, setContraste] = useState(false);
+  const [escala, setEscala] = useState(() => leer("sicode-escala") ?? "1");
+  const [contraste, setContraste] = useState(() => leer("sicode-contraste") === "alto");
   const [leyendo, setLeyendo] = useState(false);
   const panel = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    setMontado(true);
-    try {
-      const e = localStorage.getItem("sicode-escala");
-      const c = localStorage.getItem("sicode-contraste") === "alto";
-      if (e) setEscala(e);
-      setContraste(c);
-    } catch {
-      /* almacenamiento bloqueado: se usan los valores por defecto */
-    }
-  }, []);
 
   useEffect(() => {
     document.documentElement.style.setProperty("--escala", escala);
@@ -78,7 +82,7 @@ export function Encabezado() {
   }, [abierto]);
 
   /** Lectura en voz con el sintetizador del propio dispositivo: el texto no sale del navegador. */
-  const leer = () => {
+  const leerEnVoz = () => {
     if (!("speechSynthesis" in window)) return;
     if (leyendo) {
       window.speechSynthesis.cancel();
@@ -153,7 +157,7 @@ export function Encabezado() {
               <button
                 type="button"
                 aria-pressed={leyendo}
-                onClick={leer}
+                onClick={leerEnVoz}
                 className="mt-2 flex min-h-11 w-full items-center gap-2 rounded-md border border-border px-3 text-left text-sm font-semibold hover:bg-secondary"
               >
                 {leyendo ? <VolumeX className="size-4" aria-hidden="true" /> : <Volume2 className="size-4" aria-hidden="true" />}

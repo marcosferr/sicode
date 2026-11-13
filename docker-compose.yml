@@ -1,0 +1,21 @@
+# Directus: el mismo backend que usa el prototipo del S5.
+#   cp .env.directus.example .env.directus   (y cambie los valores)
+#   docker compose up -d
+#   npm run directus        # crea las colecciones de SICODE
+services:
+  directus:
+    image: directus/directus:11
+    ports:
+      - "127.0.0.1:8055:8055"
+    env_file: .env.directus
+    environment:
+      DB_CLIENT: sqlite3
+      DB_FILENAME: /directus/database/sicode.db
+      WEBSOCKETS_ENABLED: "false"
+      TELEMETRY: "false"
+    volumes:
+      - directus_db:/directus/database
+      - directus_uploads:/directus/uploads
+volumes:
+  directus_db:
+  directus_uploads:

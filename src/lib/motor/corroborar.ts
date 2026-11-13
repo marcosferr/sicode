@@ -67,7 +67,8 @@ export async function corroborar(
 
   const anotar = (i: Omit<Indicio, "id">): string => {
     const id = `I-${++n}`;
-    indicios.push({ id, ...i });
+    // Las razones sociales terminan en punto ("S.A. de C.V."): se evita el doble punto final.
+    indicios.push({ id, ...i, descripcion: i.descripcion.replace(/\.\.$/, ".") });
     return id;
   };
   const registrar = <T>(sistema: Sistema, descripcion: string, r: ResultadoFuente<T>, utiles: number) => {
