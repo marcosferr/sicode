@@ -41,7 +41,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             {children}
           </main>
           <footer className="border-t border-border bg-card">
-            <div className="mx-auto grid w-full max-w-6xl gap-6 px-4 py-8 text-sm sm:grid-cols-[1.4fr_1fr] sm:px-6">
+            <div className="mx-auto grid w-full max-w-6xl gap-6 px-4 pb-24 pt-8 text-sm sm:grid-cols-[1.4fr_1fr] sm:px-6">
               <div>
                 <p className="font-bold text-primary">SICODE · Sistema Integral de Corroboración de Denuncias</p>
                 <p className="mt-2 leading-6 text-muted-foreground">
