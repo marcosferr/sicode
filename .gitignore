@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# datos de ejecución (índices de la PDN, caché, almacén local)
+/var/

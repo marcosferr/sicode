@@ -1,0 +1,64 @@
+{
+  "version": "0.1-dataton",
+  "estado": "Valores de partida propuestos por el equipo. La autoridad que adopte el sistema debe revisarlos y aprobarlos antes de usarlo en casos reales.",
+  "aprobado_por": null,
+  "significado": {
+    "verde": "Las fuentes públicas consultadas no aportaron respaldo. No significa que la denuncia sea falsa.",
+    "amarillo": "Hay datos públicos que respaldan parte de lo denunciado. Conviene revisar los indicios antes de turnar.",
+    "rojo": "Hay respaldo documental fuerte en datos públicos. Se sugiere atención prioritaria."
+  },
+  "confianza": { "A": 1.0, "B": 0.7, "C": 0.4, "D": 0.0 },
+  "reglas_duras": [
+    {
+      "id": "empresa_inhabilitada_vigente",
+      "descripcion": "La empresa señalada tiene una inhabilitación vigente en el S3, confirmada por RFC",
+      "color": "rojo"
+    },
+    {
+      "id": "servidor_sancion_grave_mismo_ente",
+      "descripcion": "La persona señalada tiene una sanción por falta grave en el S3 en el mismo ente público",
+      "color": "rojo"
+    },
+    {
+      "id": "contrato_posterior_a_sancion",
+      "descripcion": "La empresa señalada recibió contratos después de la fecha de una sanción registrada en el S3, confirmada por RFC",
+      "color": "rojo"
+    }
+  ],
+  "categoria_regla_dura_no_confirmada": "regla_dura_sin_confirmar",
+  "severidades": {
+    "regla_dura_sin_confirmar": 3,
+    "servidor_sancion_grave": 3,
+    "servidor_sancion_solo_nombre": 2,
+    "empresa_sancionada": 3,
+    "empresa_sancionada_solo_nombre": 2,
+    "interes_declarado_en_empresa": 3,
+    "servidor_interviene_en_contrataciones": 2,
+    "contratos_empresa_con_ente": 2,
+    "contratos_empresa_otros_entes": 1,
+    "bandera_adjudicacion_directa": 1,
+    "bandera_oferente_unico": 1,
+    "bandera_concentracion_comprador": 1,
+    "bandera_plazo_corto": 1,
+    "ente_con_antecedentes": 1,
+    "cargo_confirmado": 1,
+    "otra": 1
+  },
+  "umbrales": { "verde_si_puntaje_igual_a": 0, "rojo_desde": 5 },
+  "parametros": {
+    "similitud_persona_minima": 0.88,
+    "similitud_ente_minima": 0.72,
+    "similitud_empresa_minima": 0.86,
+    "adjudicacion_directa_proporcion": 0.8,
+    "adjudicacion_directa_minimo_contratos": 3,
+    "concentracion_comprador_proporcion": 0.6,
+    "plazo_corto_dias": 10
+  },
+  "notas": [
+    "Puntaje = suma de severidad × confianza sobre hechos y posibles alertas.",
+    "Puntaje 0 es verde; entre 0 y el umbral es amarillo; desde el umbral es rojo.",
+    "Una regla dura solo cuenta si el dato es un hecho con confiabilidad A o B. Si no, baja a posible alerta.",
+    "Una fuente D vale cero a propósito: no mueve el color y genera una tarea de verificación.",
+    "El criterio se copia con su sha256 en cada corroboración: no cambia a mitad de un caso."
+  ]
+}
