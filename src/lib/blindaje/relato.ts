@@ -44,107 +44,107 @@ const TRABAJO =
 const REGLAS: Regla[] = ([
   {
     tipo: "nombre_propio",
-    titulo: "Dice su nombre",
+    titulo: "Dices tu nombre",
     nivel: "alto",
     patron: new RegExp(`\\b(?:[Mm]e llamo|[Mm]i nombre es|[Qq]uien suscribe,?|[Ee]l que suscribe,?|[Ll]a que suscribe,?)\\s+[A-ZÁÉÍÓÚÑ][${L}]+(?:\\s+(?:de |del |la )?[A-ZÁÉÍÓÚÑ][${L}]+){0,3}`, "g"),
-    consejo: "Quite su nombre. La denuncia no lo necesita para ser atendida.",
+    consejo: "Quita tu nombre. La denuncia no lo necesita para ser atendida.",
   },
   {
     tipo: "contacto",
     titulo: "Incluye un correo electrónico",
     nivel: "alto",
     patron: /[\w.+-]+@[\w-]+\.[\w.-]+/g,
-    consejo: "Quite el correo. Podrá dar seguimiento con su folio y su clave, sin dejar datos de contacto.",
+    consejo: "Quita el correo. Podrás dar seguimiento con tu folio y tu clave, sin dejar datos de contacto.",
   },
   {
     tipo: "contacto",
     titulo: "Incluye un número de teléfono",
     nivel: "alto",
     patron: /(?<![\d$.,])(?:\+?52[\s.-]?)?(?:\d[\s.-]?){10}(?![\d.,])/g,
-    consejo: "Quite el teléfono. Si es el de la persona denunciada, anótelo en la sección de personas involucradas.",
+    consejo: "Quita el teléfono. Si es el de la persona denunciada, anótalo en la sección de personas involucradas.",
   },
   {
     tipo: "identificador",
     titulo: "Incluye una CURP",
     nivel: "alto",
     patron: /\b[A-Z]{4}\d{6}[HM][A-Z]{5}[A-Z0-9]\d\b/g,
-    consejo: "Quite la CURP: identifica a una persona de forma única.",
+    consejo: "Quita la CURP: identifica a una persona de forma única.",
   },
   {
     tipo: "identificador",
     titulo: "Incluye un número de empleado o de nómina",
     nivel: "alto",
     patron: /\b(?:mi\s+)?(?:n[uú]mero|n[uú]m\.?|no\.?)\s+de\s+(?:emplead[oa]|n[oó]mina|plaza|expediente|gafete)\s*(?:es\s*)?:?\s*#?\w{3,}/gi,
-    consejo: "Quite el número: permite ubicarle en los registros del ente.",
+    consejo: "Quita el número: permite ubicarte en los registros de la institución.",
   },
   {
     tipo: "unicidad",
-    titulo: "Dice que solo usted pudo saberlo",
+    titulo: "Dices que solo tú pudiste saberlo",
     nivel: "alto",
     patron: new RegExp(
       `\\b(?:soy|fui|era|he sido)\\s+(?:el|la)\\s+[úu]nic[oa]\\b[^.;\\n]{0,60}|\\b(?:solo|sólo|solamente|únicamente)\\s+yo\\b[^.;\\n]{0,40}|\\bnadie\\s+m[aá]s\\s+(?:sabe|sab[ií]a|vio|estaba|ten[ií]a|tiene)\\b[^.;\\n]{0,40}|\\b(?:solo|sólo|únicamente)\\s+(?:a m[ií]|me lo)\\b[^.;\\n]{0,40}`,
       "gi",
     ),
-    consejo: "Si solo usted pudo saberlo, la frase le señala. Describa el hecho sin decir quién más lo sabía.",
+    consejo: "Si solo tú pudiste saberlo, la frase te señala. Describe el hecho sin decir quién más lo sabía.",
   },
   {
     tipo: "grupo_pequeno",
-    titulo: "Describe un grupo muy pequeño de testigos",
+    titulo: "Describes un grupo muy pequeño de testigos",
     nivel: "alto",
     patron: /\b(?:[ée]ramos|est[aá]bamos|fuimos|somos)\s+(?:solo\s+|sólo\s+|solamente\s+|únicamente\s+)?(?:dos|tres|cuatro|2|3|4)\b[^.;\n]{0,50}/gi,
-    consejo: "Con tan pocas personas presentes es fácil deducir quién denunció. Puede decir «había otras personas» sin dar el número.",
+    consejo: "Con tan pocas personas presentes es fácil deducir quién denunció. Puedes decir «había otras personas» sin dar el número.",
   },
   {
     tipo: "rol_propio",
-    titulo: "Dice cuál es su puesto",
+    titulo: "Dices cuál es tu puesto",
     nivel: "alto",
     patron: new RegExp(
       `\\b(?:yo\\s+)?(?:soy|trabajo como|laboro como|me desempeño como|funjo como|estoy como)\\s+(?:el|la|un|una)?\\s*(?!${PARENTESCO})[${L}]{4,}(?:\\s+(?:de|del|de la|en)\\s+[${L}A-ZÁÉÍÓÚÑ]+){0,3}|\\bmi\\s+(?:puesto|cargo|plaza)\\s+es\\s+[^.;\\n]{3,50}|\\ben\\s+mi\\s+calidad\\s+de\\s+[^.;\\n]{3,50}`,
       "gi",
     ),
-    consejo: "Su puesto reduce mucho el círculo de quién pudo denunciar. Cuente lo que pasó sin decir desde qué puesto lo vio.",
+    consejo: "Tu puesto reduce mucho el círculo de quién pudo denunciar. Cuenta lo que pasó sin decir desde qué puesto lo viste.",
   },
   {
     tipo: "relacion",
-    titulo: "Menciona un vínculo de trabajo con usted",
+    titulo: "Mencionas un vínculo de trabajo contigo",
     nivel: "medio",
     patron: new RegExp(`\\bmi\\s+(?:${TRABAJO})\\b`, "gi"),
-    consejo: "«Mi jefe» indica que usted trabaja ahí. Use el cargo o el nombre de la persona: «el director de obras».",
+    consejo: "«Mi jefe» indica que trabajas ahí. Usa el cargo o el nombre de la persona: «el director de obras».",
   },
   {
     tipo: "relacion",
-    titulo: "Menciona un vínculo familiar o personal con usted",
+    titulo: "Mencionas un vínculo familiar o personal contigo",
     nivel: "medio",
     patron: new RegExp(`\\bmi\\s+(?:${PARENTESCO}|vecin[oa]|amig[oa]|client[ea]|proveedor)\\b`, "gi"),
-    consejo: "El vínculo personal acota quién es usted. Nombre a la persona por su cargo o su nombre.",
+    consejo: "El vínculo personal acota quién eres. Nombra a la persona por su cargo o su nombre.",
   },
   {
     tipo: "area_propia",
-    titulo: "Ubica su área de trabajo",
+    titulo: "Ubicas tu área de trabajo",
     nivel: "medio",
     patron: /\ben\s+mi\s+(?:[aá]rea|oficina|departamento|direcci[oó]n|turno|equipo|ventanilla|escuela|unidad)\b|\bdonde\s+(?:yo\s+)?(?:trabajo|laboro)\b/gi,
-    consejo: "Nombre el área sin decir que es la suya: «en la Dirección de Obras» en lugar de «en mi área».",
+    consejo: "Nombra el área sin decir que es la tuya: «en la Dirección de Obras» en lugar de «en mi área».",
   },
   {
     tipo: "antiguedad",
-    titulo: "Dice cuánto tiempo lleva en el lugar",
+    titulo: "Dices cuánto tiempo llevas en el lugar",
     nivel: "medio",
     patron: /\b(?:llevo|tengo|cumpl[ií])\s+(?:\w+\s+)?(?:\d+|un|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|quince|veinte)\s+(?:años?|meses)\s+(?:trabajando|laborando|en\s+(?:el|la|esta|este))\b[^.;\n]{0,30}/gi,
-    consejo: "La antigüedad ayuda a identificarle en una plantilla. Puede omitirla.",
+    consejo: "La antigüedad ayuda a identificarte en una plantilla. Puedes omitirla.",
   },
   {
     tipo: "presencia",
-    titulo: "Dice la hora exacta en que usted estaba presente",
+    titulo: "Dices la hora exacta en que estabas presente",
     nivel: "medio",
     patron: /\b(?:yo\s+)?(?:estaba|estuve|me encontraba|llegu[eé]|entr[eé]|sal[ií]|presenci[eé]|vi|escuch[eé]|me citaron|me cit[oó]|me recibi[oó]|me atendi[oó])\b[^.;\n]{0,70}?\b(?:a\s+las?\s+\d{1,2}(?:[:.]\d{2})?(?:\s?(?:am|pm|a\.\s?m\.|p\.\s?m\.|hrs?|horas))?|\d{1,2}[:.]\d{2}\s?(?:am|pm|hrs?|horas)?)/gi,
-    consejo: "Una hora exacta junto a su presencia permite ubicarle en bitácoras o cámaras. Use «por la mañana» o «a mediodía».",
+    consejo: "Una hora exacta junto a tu presencia permite ubicarte en bitácoras o cámaras. Usa «por la mañana» o «a mediodía».",
   },
   {
     tipo: "trato_directo",
-    titulo: "Describe algo que le dijeron o pidieron solo a usted",
+    titulo: "Describes algo que te dijeron o pidieron solo a ti",
     nivel: "medio",
     patron: /\bme\s+(?:pidi[oó]|dijo|exigi[oó]|ofreci[oó]|entreg[oó]|orden[oó]|amenaz[oó])\b[^.;\n]{0,60}\b(?:en\s+privado|a\s+solas|en\s+su\s+oficina|por\s+(?:whatsapp|mensaje|tel[eé]fono|llamada))\b/gi,
-    consejo: "Si la conversación fue a solas, la otra persona sabrá que fue usted. Valore si puede describir el hecho sin esa escena, o aportar una evidencia que no dependa de su testimonio.",
+    consejo: "Si la conversación fue a solas, la otra persona sabrá que fuiste tú. Valora si puedes describir el hecho sin esa escena, o aportar una evidencia que no dependa de tu testimonio.",
   },
 ] satisfies Regla[]).map((r) => ({ ...r, patron: conLimitesUnicode(r.patron) }));
 
@@ -184,9 +184,9 @@ export function analizarRelato(texto: string): AnalisisRelato {
   const nivel: NivelRiesgo = altos ? "alto" : medios >= 2 ? "medio" : medios ? "medio" : "bajo";
   const resumen =
     nivel === "bajo"
-      ? "No encontramos frases que le identifiquen."
+      ? "No encontramos frases que te identifiquen."
       : nivel === "alto"
-        ? `Hay ${altos} frase${altos === 1 ? "" : "s"} que puede${altos === 1 ? "" : "n"} identificarle${medios ? ` y ${medios} más que conviene revisar` : ""}.`
+        ? `Hay ${altos} frase${altos === 1 ? "" : "s"} que puede${altos === 1 ? "" : "n"} identificarte${medios ? ` y ${medios} más que conviene revisar` : ""}.`
         : `Hay ${medios} frase${medios === 1 ? "" : "s"} que conviene revisar.`;
   return { nivel, hallazgos: sinSolape, resumen };
 }

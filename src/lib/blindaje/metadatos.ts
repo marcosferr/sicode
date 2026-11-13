@@ -216,7 +216,7 @@ async function limpiarPdf(b: Uint8Array): Promise<{ bytes: Uint8Array; hallazgos
   const bytes = await doc.save({ useObjectStreams: true });
 
   const advertencias: string[] = [];
-  if (doc.catalog.has(PDFName.of("AcroForm"))) advertencias.push("El PDF tiene campos de formulario o firmas: revise que no incluyan su nombre.");
+  if (doc.catalog.has(PDFName.of("AcroForm"))) advertencias.push("El PDF tiene campos de formulario o firmas: revisa que no incluyan tu nombre.");
   return { bytes, hallazgos, advertencias };
 }
 
@@ -284,7 +284,7 @@ async function limpiarOffice(b: Uint8Array): Promise<{ bytes: Uint8Array; hallaz
 
   const documento = await zip.file("word/document.xml")?.async("string");
   if (documento && /<w:(ins|del)\b/.test(documento)) {
-    advertencias.push("El documento tiene cambios con seguimiento: el texto borrado sigue dentro del archivo. Acéptelos o rechácelos antes de enviarlo.");
+    advertencias.push("El documento tiene cambios con seguimiento: el texto borrado sigue dentro del archivo. Acéptalos o recházalos antes de enviarlo.");
   }
   const bytes = await zip.generateAsync({ type: "uint8array", compression: "DEFLATE" });
   return { bytes, hallazgos, advertencias };
@@ -293,7 +293,7 @@ async function limpiarOffice(b: Uint8Array): Promise<{ bytes: Uint8Array; hallaz
 /* ---------- Entrada única ---------- */
 
 const ADVERTENCIA_CONTENIDO =
-  "La limpieza quita datos ocultos, no lo que se ve: revise que el contenido no muestre su nombre, su cara, su usuario o su número.";
+  "La limpieza quita datos ocultos, no lo que se ve: revisa que el contenido no muestre tu nombre, tu cara, tu usuario o tu número.";
 
 export async function limpiarArchivo(entrada: Uint8Array, nombre: string): Promise<ResultadoLimpieza> {
   const tipo = detectarTipo(entrada, nombre);
@@ -348,7 +348,7 @@ export async function limpiarArchivo(entrada: Uint8Array, nombre: string): Promi
         hallazgos: [],
         advertencias: [
           `No se pudo limpiar este archivo (${e instanceof Error ? e.message : "formato no reconocido"}). ` +
-            "Si es una imagen o un documento, tome una captura de pantalla y envíe la captura.",
+            "Si es una imagen o un documento, toma una captura de pantalla y envía la captura.",
         ],
         limpiado: false,
         bytesDespues: entrada.length,
@@ -361,8 +361,8 @@ export async function limpiarArchivo(entrada: Uint8Array, nombre: string): Promi
       ...base,
       hallazgos: [],
       advertencias: [
-        "Este tipo de archivo no se puede limpiar automáticamente. Para fotos use JPG o PNG; para documentos, PDF o Word. " +
-          "En audio y video, la voz y las imágenes pueden identificarle.",
+        "Este tipo de archivo no se puede limpiar automáticamente. Para fotos usa JPG o PNG; para documentos, PDF o Word. " +
+          "En audio y video, la voz y las imágenes pueden identificarte.",
       ],
       limpiado: false,
       bytesDespues: entrada.length,
