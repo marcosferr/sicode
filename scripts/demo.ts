@@ -2,9 +2,9 @@
  * Carga denuncias FICTICIAS para probar la bandeja, la corroboración y los datos abiertos.
  *   npm run demo
  *
- * Todos los nombres, empresas y entes son inventados. Algunos casos coinciden a propósito
- * con las fuentes de demostración (SICODE_PDN=demo) para mostrar el semáforo en rojo y
- * en amarillo sin acusar a nadie real.
+ * Todos los nombres, empresas y entes son inventados. El caso del «director de obras»
+ * no se precarga: se presenta en vivo en la demostración y, al corroborarlo con las
+ * fuentes de demostración (SICODE_PDN=demo), da semáforo rojo sin acusar a nadie real.
  *
  * El folio y la clave de un caso de prueba quedan en var/demo-seguimiento.txt.
  */
@@ -15,17 +15,6 @@ process.loadEnvFile?.(".env.local");
 const ENTE = "Instituto Ficticio de Infraestructura de Valle Sereno";
 
 const CASOS = [
-  {
-    relato:
-      "El director de obras entregó cuatro contratos de mantenimiento de caminos a la empresa Constructora Demostrativa del Este, S.A. de C.V. sin concurso. " +
-      "Se comenta que es socio de esa empresa. Los trabajos se pagaron completos aunque quedaron a medias.",
-    conductas: ["FAVORITISMO_CONTRATO", "CONFLICTO"],
-    entidad: "11", municipio: "León", institucion: ENTE,
-    involucrados: [
-      { tipo: "SERVIDOR_PUBLICO" as const, nombre: "Armando Ficticio Demostrado", cargo: "Director de obras", institucion: ENTE },
-      { tipo: "EMPRESA" as const, razonSocial: "Constructora Demostrativa del Este, S.A. de C.V.", rfc: "CDE180312AB7" },
-    ],
-  },
   {
     relato:
       "En el área de adquisiciones del municipio piden un porcentaje a los proveedores para liberar los pagos. La jefa de adquisiciones es quien lo solicita por medio de su asistente.",
@@ -72,8 +61,8 @@ async function main() {
   for (const [i, c] of CASOS.entries()) {
     const { folio, clave } = await servicio.presentarDenuncia({
       ...base,
-      anonimo: i !== 1,
-      contacto: i === 1 ? { correo: "persona.ficticia@ejemplo.test", nombre: "Persona Ficticia" } : undefined,
+      anonimo: i !== 0,
+      contacto: i === 0 ? { correo: "persona.ficticia@ejemplo.test", nombre: "Persona Ficticia" } : undefined,
       narracionHechos: c.relato,
       conductas: [...c.conductas],
       lugar: { entidad: c.entidad, municipio: c.municipio, institucion: c.institucion },
