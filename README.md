@@ -26,7 +26,7 @@ No es un sitio oficial de la SESNA ni de la PDN, y no usa sus logotipos.
 |---|---|
 | 1. Confidencialidad y protección de la identidad | [docs/confidencialidad.md](docs/confidencialidad.md): 12 medidas implementadas, modelo de amenazas y límites |
 | 2. Valor público | Bandeja priorizada por respaldo documental; hipótesis verificables por denuncia; fundamento orientativo de la LGRA y del CPF |
-| 3. Funcionalidad técnica | 47 pruebas automáticas; flujo completo probado contra la PDN real y contra Directus |
+| 3. Funcionalidad técnica | 48 pruebas automáticas; flujo completo probado contra la PDN real y contra Directus |
 | 4. Explotación de datos de la PDN | [docs/metodologia.md](docs/metodologia.md): cruce con S1, S2, S3 y S6; el S5 genera además un conjunto de datos abiertos nuevo |
 | 5. Experiencia de usuario y accesibilidad | Lighthouse: accesibilidad 100 en las páginas auditadas; texto ampliable, alto contraste, lectura en voz, navegación por teclado |
 | 6. Creatividad e innovación | Aviso de riesgo de identificación en el relato; limpieza de evidencias en el navegador; protección de datos abiertos contra la resta |

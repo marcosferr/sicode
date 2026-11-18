@@ -84,7 +84,7 @@ Además:
 ## Cómo verificarlo
 
 ```bash
-npm test                               # 47 pruebas, incluidas las de limpieza y de datos abiertos
+npm test                               # 48 pruebas, incluidas las de limpieza y de datos abiertos
 curl -sI http://localhost:3000/denunciar | grep -i content-security
 grep -rn "x-forwarded-for\|headers()" src/app/api/denuncias src/app/api/evidencias   # sin resultados
 ```

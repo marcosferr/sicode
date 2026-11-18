@@ -13,7 +13,7 @@
  * Límite: son reglas, no comprensión. Reducen descuidos frecuentes; no garantizan que
  * un relato sea imposible de atribuir.
  */
-import { conLimitesUnicode } from "../texto";
+import { conLimitesUnicode, tolerarAcentos } from "../texto";
 
 export type NivelRiesgo = "bajo" | "medio" | "alto";
 
@@ -146,7 +146,7 @@ const REGLAS: Regla[] = ([
     patron: /\bme\s+(?:pidi[oó]|dijo|exigi[oó]|ofreci[oó]|entreg[oó]|orden[oó]|amenaz[oó])\b[^.;\n]{0,60}\b(?:en\s+privado|a\s+solas|en\s+su\s+oficina|por\s+(?:whatsapp|mensaje|tel[eé]fono|llamada))\b/gi,
     consejo: "Si la conversación fue a solas, la otra persona sabrá que fuiste tú. Valora si puedes describir el hecho sin esa escena, o aportar una evidencia que no dependa de tu testimonio.",
   },
-] satisfies Regla[]).map((r) => ({ ...r, patron: conLimitesUnicode(r.patron) }));
+] satisfies Regla[]).map((r) => ({ ...r, patron: conLimitesUnicode(tolerarAcentos(r.patron)) }));
 
 export interface AnalisisRelato {
   nivel: NivelRiesgo;

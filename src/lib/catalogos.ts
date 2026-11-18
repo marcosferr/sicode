@@ -1,4 +1,4 @@
-import { conLimitesUnicode } from "./texto";
+import { conLimitesUnicode, tolerarAcentos } from "./texto";
 import type { ClasificacionSugerida } from "./tipos";
 
 /** Entidades federativas con su clave INEGI. */
@@ -139,7 +139,7 @@ export const CONDUCTAS: Conducta[] = ([
     fundamentos: [F.NO_GRAVE],
     pistas: /\b(maltrat\w*|no me atendi\w*|negligen\w*|se neg[oó] a|retras[oó]|prepoten\w*)\b/i,
   },
-] satisfies Conducta[]).map((c) => ({ ...c, pistas: conLimitesUnicode(c.pistas) }));
+] satisfies Conducta[]).map((c) => ({ ...c, pistas: conLimitesUnicode(tolerarAcentos(c.pistas)) }));
 
 export const CONDUCTA_POR_CLAVE = new Map(CONDUCTAS.map((c) => [c.clave, c]));
 

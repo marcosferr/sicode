@@ -141,6 +141,20 @@ describe("riesgo de identificación en el relato", () => {
     expect(tipos("La beneficiada es la esposa del tesorero.")).toEqual([]);
   });
 
+  it("no depende de acentos, «ñ» ni mayúsculas", () => {
+    const pares = [
+      ["Mi cuñado es el tesorero.", "Mi cunado es el tesorero."],
+      ["Llevo cinco años trabajando en la dirección.", "Llevo cinco anos trabajando en la direccion."],
+      ["Soy la única persona del área que lo vio.", "SOY LA UNICA PERSONA DEL AREA QUE LO VIO."],
+      ["Éramos solo tres en la oficina.", "eramos solo tres en la oficina."],
+      ["Mi compañera lo vio todo.", "Mi companera lo vio todo."],
+    ];
+    for (const [con, sin] of pares) {
+      expect(tipos(sin)).toEqual(tipos(con));
+      expect(tipos(con).length).toBeGreaterThan(0);
+    }
+  });
+
   it("devuelve la posición exacta de cada fragmento", () => {
     const texto = "Hechos: soy el único que tiene la llave.";
     const [h] = analizarRelato(texto).hallazgos;

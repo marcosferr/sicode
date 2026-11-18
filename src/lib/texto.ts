@@ -206,3 +206,37 @@ export function conLimitesUnicode(re: RegExp): RegExp {
   const banderas = re.flags.includes("u") ? re.flags : re.flags + "u";
   return new RegExp(re.source.replace(/\\b/g, limite), banderas);
 }
+
+const SIN_ACENTO: Record<string, string> = {
+  á: "a", é: "e", í: "i", ó: "o", ú: "u", ü: "u", ñ: "n",
+  Á: "A", É: "E", Í: "I", Ó: "O", Ú: "U", Ü: "U", Ñ: "N",
+};
+
+/**
+ * Hace que una expresión acepte cada letra acentuada o «ñ» también sin acento:
+ * «cuñado» reconoce «cunado» y «años» reconoce «anos». Mucha gente escribe sin
+ * acentos o en teclados sin «ñ», y un aviso de identidad no debe depender de eso.
+ * Dentro de una clase de caracteres agrega la letra simple; fuera, la convierte en clase.
+ */
+export function tolerarAcentos(re: RegExp): RegExp {
+  let salida = "";
+  let enClase = false;
+  const src = re.source;
+  for (let i = 0; i < src.length; i++) {
+    const c = src[i];
+    if (c === "\\") {
+      salida += c + (src[i + 1] ?? "");
+      i++;
+      continue;
+    }
+    if (c === "[" && !enClase) enClase = true;
+    else if (c === "]" && enClase) enClase = false;
+    const simple = SIN_ACENTO[c];
+    if (!simple) {
+      salida += c;
+      continue;
+    }
+    salida += enClase ? c + simple : `[${c}${simple}]`;
+  }
+  return new RegExp(salida, re.flags);
+}
